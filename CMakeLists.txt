@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 project(CCreeper VERSION 0.1.0)
 
 # 设置 vcpkg 工具链（必须放在最前面！）
-set(CMAKE_TOOLCHAIN_FILE "E:/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE "H:/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 # 明确指定使用静态 triplet
 set(VCPKG_TARGET_TRIPLET "x64-windows-static")
