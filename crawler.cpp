@@ -53,5 +53,20 @@ std::string WebCrawler::get(const std::string& url,const std::map<std::string,st
         return "";
     }
 
-    curl_easy_getinfo(curl_,CURLINFO_RESP)
+    curl_easy_getinfo(curl_,CURLINFO_RESPNSE_CODE,&lastResponseCode_);
+    curl_easy_getinfo(curl_,CURLINFO_TOTAL_TIME,&lastResponseTime_);
+
+    return response;
 }
+
+// POST请求实现（与GET类似，但多了数据设置）
+std::string WebCrawler:post(const std::string& url,
+                            const std::string& data,
+                            const std::map<std::string,std::string>& headers
+                )
+                {
+                    if(!curl_) return "";
+                    std::string response;
+                    curl_easy_getinfo(curl_,CURLOPT_URL,url.c_str());
+                    curl_easy_getinfo
+                }
