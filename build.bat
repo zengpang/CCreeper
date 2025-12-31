@@ -4,7 +4,7 @@ rmdir /s /q build
 
 echo Configuring with static linking...
 cmake -B build ^
-    -DCMAKE_TOOLCHAIN_FILE=H:/vcpkg/scripts/buildsystems/vcpkg.cmake ^
+    -DCMAKE_TOOLCHAIN_FILE=E:/vcpkg/scripts/buildsystems/vcpkg.cmake ^
     -DVCPKG_TARGET_TRIPLET=x64-windows-static ^
     -DBUILD_SHARED_LIBS=OFF ^
     -DCURL_USE_STATIC_LIBS=ON

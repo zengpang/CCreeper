@@ -38,7 +38,21 @@ int main()
                 std::cout << "  -" << link << std::endl;
             }
 
-            std::cout<<"\n找到 "<<images.size()<<" 个图片"
+            std::cout << "\n找到 " << images.size() << " 个图片:" << std::endl;
+            for (const auto &img : images)
+            {
+                std::cout << " -" << img << std::endl;
+            }
+
+            std::cout << "\n提取的文本内容" << std::endl;
         }
     }
+    catch (const std::exception &e)
+    {
+        std::cerr << "错误: " << e.what() << std::endl;
+    }
+
+    // 清理libcurl全局环境
+    curl_global_cleanup();
+    return 0;
 }

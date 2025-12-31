@@ -14,12 +14,12 @@ public:
    * @param url 请求地址
    * @param headers 可选的请求头
    */
-  std::string get(const std::string &url, const std::map<std::string> &headers = {});
+  std::string get(const std::string &url, const std::map<std::string, std::string> &headers = {});
 
   /**
    * HTTP
    */
-  std::string post(const std::string &url, const std::string &data, const std::map<std::strng, std::string> &headers = {});
+  std::string post(const std::string &url, const std::string &data, const std::map<std::string, std::string> &headers = {});
 
   // 设置代理
   void setProxy(const std::string &proxy);
@@ -32,10 +32,10 @@ public:
 
   double getLastRequestTime() const; // 获取请求耗时
 private:
-  CURL *curl_;
+  CURL *curl_;             // CURL 句柄指针
   std::string userAgent_;  // 用户代理字符串
   std::string proxy_;      // 代理服务器地址
-  long timeout_;           // 超时时间(秒)
+  long timeout_;           // 超时时间（秒）
   long lastResponseCode_;  // 最后一次响应的HTTP状态码
   double lastRequestTime_; // 最后一次请求的耗时
 
