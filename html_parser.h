@@ -1,21 +1,21 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <regex> //æ­£åˆ™è¡¨è¾¾å¼
+#include <regex> //ÕıÔò±í´ïÊ½
 class HTMLParser
 {
 public:
-    // æå–æ‰€æœ‰é“¾æ¥
-    // html:HTMLå†…å®¹
-    //  baseUrl:åŸºç¡€URL(ç”¨äºå¤„ç†ç›¸å¯¹é“¾æ¥)
+    // ÌáÈ¡ËùÓĞÁ´½Ó
+    // html:HTMLÄÚÈİ
+    //  baseUrl:»ù´¡URL(ÓÃÓÚ´¦ÀíÏà¶ÔÁ´½Ó)
     static std::vector<std::string> extractLinks(const std::string& html,const std::string& baseUrl="");
 
-    //æå–æ‰€æœ‰å›¾ç‰‡é“¾æ¥
+    //ÌáÈ¡ËùÓĞÍ¼Æ¬Á´½Ó
     static std::vector<std::string> extractImages(const std::string& html);
 
-    //æå–çº¯æ–‡æœ¬(å»é™¤æ‰€æœ‰HTMLæ ‡ç­¾)
+    //ÌáÈ¡´¿ÎÄ±¾(È¥³ıËùÓĞHTML±êÇ©)
     static std::string extrackText(const std::string& html);
 
-    //æå–ç‰¹å®šæ ‡ç­¾çš„å†…å®¹(ç¤ºä¾‹æ–¹æ³•)
+    //ÌáÈ¡ÌØ¶¨±êÇ©µÄÄÚÈİ(Ê¾Àı·½·¨)
     static std::vector<std::string> extractTags(const std::string& html,const std::string& tagName);
 };

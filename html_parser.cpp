@@ -2,24 +2,24 @@
 #include <regex>
 #include <algorithm>
 
-// æå–é“¾æ¥
+// ÌáÈ¡Á´½Ó
 std::vector<std::string> HTMLParser::extractLinks(const std::string &html, const std::string &baseUrl)
 {
-    std::vector<std::string> links; // å­˜å‚¨æ‰¾åˆ°çš„é“¾æ¥
+    std::vector<std::string> links; // ´æ´¢ÕÒµ½µÄÁ´½Ó
 
-    // æ­£åˆ™è¡¨è¾¾å¼ï¼ŒåŒ¹é…<a href="...">æ ‡ç­¾
-    // icess:å¿½ç•¥å¤§å°å†™
+    // ÕıÔò±í´ïÊ½£¬Æ¥Åä<a href="...">±êÇ©
+    // icess:ºöÂÔ´óĞ¡Ğ´
     std::regex linkRegex("<a\\s+[^>]*href\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>", std::regex_constants::icase);
 
-    // ä½¿ç”¨æ­£åˆ™è¡¨è¾¾å¼è¿­ä»£å™¨æŸ¥æ‰¾æ‰€æœ‰åŒ¹é…
+    // Ê¹ÓÃÕıÔò±í´ïÊ½µü´úÆ÷²éÕÒËùÓĞÆ¥Åä
     std::sregex_iterator it(html.begin(), html.end(), linkRegex);
-    std::sregex_iterator end; // ç»“æœè¿­ä»£å™¨
+    std::sregex_iterator end; // ½á¹ûµü´úÆ÷
 
     while (it != end)
     {
-        std::string link = (*it)(1).str(); // è·å–ç¬¬ä¸€ä¸ªæ•è·ç»„(hrefçš„å€¼)
+        std::string link = (*it)(1).str(); // »ñÈ¡µÚÒ»¸ö²¶»ñ×é(hrefµÄÖµ)
 
-        // å¤„ç†ç›¸å¯¹é“¾æ¥(å¦‚æœä¸æ˜¯ä»¥httpå¼€å¤´)
+        // ´¦ÀíÏà¶ÔÁ´½Ó(Èç¹û²»ÊÇÒÔhttp¿ªÍ·)
         if (!baseUrl.emoty() && link.find("http") != 0)
         {
             if (link[0] == '/')
@@ -32,37 +32,49 @@ std::vector<std::string> HTMLParser::extractLinks(const std::string &html, const
             }
         }
 
-        links.push_back(link); // æ·»åŠ åˆ°ç»“æœåˆ—è¡¨
-        ++it;                  // ç§»åŠ¨åˆ°ä¸‹ä¸€ä¸ªåŒ¹é…
+        links.push_back(link); // Ìí¼Óµ½½á¹ûÁĞ±í
+        ++it;                  // ÒÆ¶¯µ½ÏÂÒ»¸öÆ¥Åä
     }
 
     return links;
 }
 
-// æå–å›¾ç‰‡ï¼ˆä¸æå–é“¾æ¥ç±»ä¼¼ï¼‰
+// ÌáÈ¡Í¼Æ¬£¨ÓëÌáÈ¡Á´½ÓÀàËÆ£©
 std::vector<std::string> HTMLParser::extractImages(const std::string &html)
 {
     std::vector<std::string> images;
-    // åŒ¹é…<img src="..." > æ ‡ç­¾
+    // Æ¥Åä<img src="..." > ±êÇ©
     std::regex imgRegex("<img\\s+[^>]*src\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>",
                         std::regex_constants::icase);
-    
-    // ä½¿ç”¨æ­£åˆ™è¡¨è¾¾å¼è¿­ä»£å™¨æŸ¥æ‰¾æ‰€æœ‰åŒ¹é…
-    std::sregex_iterator it(html.begin(),html.end(),imgRegex);
+
+    // Ê¹ÓÃÕıÔò±í´ïÊ½µü´úÆ÷²éÕÒËùÓĞÆ¥Åä
+    std::sregex_iterator it(html.begin(), html.end(), imgRegex);
     std::sregex_iterator end;
 
-    while(it!= end)
+    while (it != end)
     {
-        images.push_back((*it)[1].str());//è·å–srcå±æ€§
+        images.push_back((*it)[1].str()); // »ñÈ¡srcÊôĞÔ
         ++it;
     }
 
     return images;
-    
 }
 
-//æå–çº¯æ–‡æœ¬
-std::string HTMLParser::extractText(const std::string& html)
+// ÌáÈ¡´¿ÎÄ±¾
+std::string HTMLParser::extractText(const std::string &html)
 {
+    std::string text = html; // ¸´ÖÆHTMLÄÚÈİ
 
+    // ÒÆ³ıËùÓĞHTML±êÇ©
+    std::regex tagRegex("<[^>]*>");
+    text = std::regex_replace(text, spaceRegex, "");
+
+    // ¼òµ¥µÄHTMLÊµÌå½âÎö
+    text = std::regex_replace(text, std::regex("&amp;"), "&");
+    text = std::regex_replace(text, std::regex("&lt;"), "<");
+    text = std::regex_replace(text, std::regex("&gt;"), ">");
+    text = std::regex_replace(text, std::regex("&quot;"), "\"");
+    text = std::regex_replace(text, std::regex("&nbsp;"), " ");
+
+    return text;
 }
