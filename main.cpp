@@ -22,6 +22,7 @@ int main()
 
         if (!html.empty())
         {
+            std::cout << "网页原始内容" << html << std::endl;
             std::cout << "成功获取网页内容(" << html.length() << "字节)" << std::endl;
             std::cout << "响应码：" << crawler.getLastResponseCode() << std::endl;
             std::cout << "请求时间：" << crawler.getLastRequestTime() << std::endl;
@@ -54,5 +55,6 @@ int main()
 
     // 清理libcurl全局环境
     curl_global_cleanup();
+    system("pause");
     return 0;
 }

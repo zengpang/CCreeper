@@ -17,10 +17,10 @@ std::vector<std::string> HTMLParser::extractLinks(const std::string &html, const
 
     while (it != end)
     {
-        std::string link = (*it)(1).str(); // 获取第一个捕获组(href的值)
+        std::string link = (*it)[1].str(); // 获取第一个捕获组(href的值)
 
         // 处理相对链接(如果不是以http开头)
-        if (!baseUrl.emoty() && link.find("http") != 0)
+        if (!baseUrl.empty() && link.find("http") != 0)
         {
             if (link[0] == '/')
             {
@@ -67,8 +67,11 @@ std::string HTMLParser::extractText(const std::string &html)
 
     // 移除所有HTML标签
     std::regex tagRegex("<[^>]*>");
-    text = std::regex_replace(text, spaceRegex, "");
+    text = std::regex_replace(text, tagRegex, "");
 
+    // 将多个连续空白字符替换为
+    std::regex spaceRegex("\\s+");
+    text = std::regex_replace(text, spaceRegex, " ");
     // 简单的HTML实体解析
     text = std::regex_replace(text, std::regex("&amp;"), "&");
     text = std::regex_replace(text, std::regex("&lt;"), "<");

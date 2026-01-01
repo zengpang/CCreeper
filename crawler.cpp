@@ -6,7 +6,7 @@
 WebCrawler::WebCrawler() : curl_(curl_easy_init()),
                            userAgent_("Mozilla/5.0 (Windows NT 10.0;Win64;x64) AppleWebKit/537.36"), // 默认UA
                            timeout_(30),                                                             // 默认超时30秒
-                           lastResponseCode_(0),                                                      // 初始状态码为0
+                           lastResponseCode_(0),                                                     // 初始状态码为0
                            lastRequestTime_(0)                                                       // 初始时间为0
 {
     if (curl_) // 如果CURL初始化成功
@@ -43,31 +43,30 @@ std::string WebCrawler::get(const std::string &url, const std::map<std::string, 
     curl_easy_setopt(curl_, CURLOPT_URL, url.c_str());             // 设置请求URL
     curl_easy_setopt(curl_, CURLOPT_HTTPGET, 1L);                  // 明确设置为GET方法
     curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, WriteCallback); // 设置写入回调
-    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, &response);          // 设置回调数据
+    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, &response);         // 设置回调数据
 
     setHeaders(headers); // 设置自定义请求头
 
-    CURLcode res = curl_easy_setopt(curl_); // 执行请求
+    CURLcode res = curl_easy_perform(curl_); // 执行请求
 
     if (res != CURLE_OK)
     {
-        std::cerr << "POST request failed: " << curl_easy_setopt(res) << std::endl;
+        std::cerr << "POST request failed: " << curl_easy_strerror(res) << std::endl;
         return "";
     }
 
-    curl_easy_getinfo(curl_, CURLINFO_RESPNSE_CODE, &lastResponseCode_);
-    curl_easy_getinfo(curl_, CURLINFO_TOTAL_TIME, &lastResponseTime_);
+    curl_easy_getinfo(curl_, CURLINFO_RESPONSE_CODE, &lastResponseCode_);
+    curl_easy_getinfo(curl_, CURLINFO_TOTAL_TIME, &lastRequestTime_);
 
     return response;
 }
 
 // POST请求实现（与GET类似，但多了数据设置）
-std::string WebCrawler : post(const std::string &url,
+std::string WebCrawler::post(const std::string &url,
                               const std::string &data,
-                              const std::map<std::string, std::string> &headers)
+                              const std::map<std::string, std::string>& headers)
 {
-    if (!curl_)
-        return "";
+    if (!curl_) return "";
     std::string response;
     curl_easy_setopt(curl_, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl_, CURLOPT_POST, 1L);
@@ -108,7 +107,7 @@ void WebCrawler::setTimeout(long seconds)
 }
 
 // 设置请求头
-void WebCrawler : setHeaders(const std::map<std::string, std::string> &headers)
+void WebCrawler::setHeaders(const std::map<std::string, std::string> &headers)
 {
     struct curl_slist *chunk = nullptr;
 
@@ -124,7 +123,7 @@ void WebCrawler : setHeaders(const std::map<std::string, std::string> &headers)
  * size_t 是 C++ 中一个非常重要的无符号整数类型，用于表示对象的大小或数组索引等。
  */
 // 静态回调函数(与基础版本相同)
-size_t WebCrawler : WriteCallback(void *contents, size_t size, size_t nmemb, std::string *response)
+size_t WebCrawler::WriteCallback(void *contents, size_t size, size_t nmemb, std::string *response)
 {
     size_t totalSize = size * nmemb;
     response->append((char *)contents, totalSize);
