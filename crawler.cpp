@@ -30,8 +30,8 @@ void WebCrawler::setCommonOptions()
     curl_easy_setopt(curl_, CURLOPT_USERAGENT, userAgent_.c_str()); // 设置用户代理
     curl_easy_setopt(curl_, CURLOPT_FOLLOWLOCATION, 1L);            // 允许重定向
     curl_easy_setopt(curl_, CURLOPT_TIMEOUT, timeout_);             // 设置超时
-    curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYPEER, 0L);            // 不验证SSL证书
-    curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYHOST, 0L);            // 不验证主机名(测试用)
+    curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYPEER, 1L);            // 不验证SSL证书
+    curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYHOST, 2L);            // 不验证主机名(测试用)
 }
 
 // GET请求实现

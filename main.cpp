@@ -1,6 +1,7 @@
 #include <iostream>
 #include "crawler.h"     //包含爬虫类
 #include "html_parser.h" // 包含HTML解析器
+#include "enums.h"       // 包含枚举头文件
 int main()
 {
     // 初始化
@@ -17,11 +18,36 @@ int main()
             {"Connection", "keep-alive"}};
 
         // 爬取网页
-        std::string url = "http://httpbin.org/html";
-        std::string html = crawler.get(url, headers); // 执行GET请求
+        std::string url;           // 默认地址
+        int inputWebType; // 爬取网页类型
+        std::cout << "请输入序号，以此选择爬取网页地址\n";
+        std::cout << "1:E站\n";
+        std::cout << "2:原始HTTP测试站\n";
+        std::cin >> inputWebType;
+        switch (inputWebType)
+        {
+        case CrawlWebType::EHENTAI:
+            url = "https://e-hentai.org/";
+            break;
 
+        case CrawlWebType::ORGHTTP:
+            url = "http://httpbin.org/html";
+            break;
+        }
+        if (url.empty())
+        {
+            std::cout << "爬取目标地址不能为空" << std::endl;
+            // 清理libcurl全局环境
+            curl_global_cleanup();
+            system("pause");
+            return 0;
+        }
+        std::cout << "开始爬取中..." << std::endl;
+        std::string html = crawler.get(url, headers); // 执行GET请求
+        std::cout << "爬取完成" << std::endl;
         if (!html.empty())
         {
+
             std::cout << "网页原始内容" << html << std::endl;
             std::cout << "成功获取网页内容(" << html.length() << "字节)" << std::endl;
             std::cout << "响应码：" << crawler.getLastResponseCode() << std::endl;
@@ -46,6 +72,10 @@ int main()
             }
 
             std::cout << "\n提取的文本内容" << std::endl;
+        }
+        else
+        {
+            std::cout << "获取不到网页原始内容" << std::endl;
         }
     }
     catch (const std::exception &e)
