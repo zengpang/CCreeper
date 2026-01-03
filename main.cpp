@@ -1,6 +1,6 @@
 #include <iostream>
 #include "crawler.h"     //包含爬虫类
-#include "html_parser.h" // 包含HTML解析器
+#include "htmlParser/baseHtmlParser/html_parser.h" // 包含HTML解析器
 #include "enums.h"       // 包含枚举头文件
 int main()
 {
@@ -21,7 +21,7 @@ int main()
         std::string url;           // 默认地址
         int inputWebType; // 爬取网页类型
         std::cout << "请输入序号，以此选择爬取网页地址\n";
-        std::cout << "1:E站\n";
+        std::cout << "1:E站(需使用VPN,否则无法爬取信息)\n";
         std::cout << "2:原始HTTP测试站\n";
         std::cin >> inputWebType;
         switch (inputWebType)

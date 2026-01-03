@@ -26,7 +26,7 @@ message(STATUS "CURL include dir: ${CURL_INCLUDE_DIRS}")
 add_executable(CCreeper 
     main.cpp
     crawler.cpp
-    html_parser.cpp
+    htmlParser/baseHtmlParser/html_parser.cpp
 )
 
 # 链接 curl 并添加必要的 Windows 系统库
