@@ -1,5 +1,5 @@
 #pragma once
-#include "../htmlParser/baseHtmlParser/html_parser.h" // 包含HTML解析器
+#include "../baseHtmlParser/html_parser.h" // 包含HTML解析器
 #include <vector>
 class EHentaiHtmlParser : HTMLParser
 {
@@ -15,5 +15,5 @@ public:
     // 提取漫画大小
     static std::string extractComicSize(const std::string &html);
     // 获取下一个分页链接
-    static std::string getNextPageLink(const std::string &html);
-}
+    static std::string extractNextPageLink(const std::string &html);
+};

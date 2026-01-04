@@ -27,6 +27,7 @@ add_executable(CCreeper
     main.cpp
     crawler.cpp
     htmlParser/baseHtmlParser/html_parser.cpp
+    htmlParser/eHentaiHtmlParser/eHentail_html_parser.cpp
 )
 
 # 链接 curl 并添加必要的 Windows 系统库
