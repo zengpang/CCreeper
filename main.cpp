@@ -4,6 +4,31 @@
 #include "htmlParser/eHentaiHtmlParser/eHentai_html_parser.h" // E站 HTML解析器
 #include "enums.h"                                            // 包含枚举头文件
 #include <sstream>
+#include <windows.h>
+// 将 UTF-8 转换为 Windows 控制台默认的 GBK
+std::string UTF8ToGBK(const std::string& utf8Str) {
+    if (utf8Str.empty()) return "";
+    
+    int wideLen = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, nullptr, 0);
+    if (wideLen <= 0) return utf8Str;
+    
+    wchar_t* wideStr = new wchar_t[wideLen];
+    MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, wideStr, wideLen);
+
+    int gbkLen = WideCharToMultiByte(CP_ACP, 0, wideStr, -1, nullptr, 0, nullptr, nullptr);
+    if (gbkLen <= 0) {
+        delete[] wideStr;
+        return utf8Str;
+    }
+    
+    char* gbkStr = new char[gbkLen];
+    WideCharToMultiByte(CP_ACP, 0, wideStr, -1, gbkStr, gbkLen, nullptr, nullptr);
+
+    std::string result(gbkStr);
+    delete[] wideStr;
+    delete[] gbkStr;
+    return result;
+}
 /**
  * 根据 网页类型 获取HTML
  * @param crawler 爬虫实例
@@ -41,9 +66,11 @@ std::string getHtmlByWebType(
  * @param html 欲解析的html字符串
  */
 void eHentaiHtmlAnalysis(
-    std::string html)
+    std::string html,
+    std::string url
+)
 {
-    std::string nextPageLink = EHentaiHtmlParser::extractNextPageLink(html);
+    std::string nextPageLink = EHentaiHtmlParser::extractNextPageLink(html,url);
     std::cout << "下一页链接为" << nextPageLink << std::endl;
 }
 /**
@@ -82,6 +109,7 @@ void baseHtmlAnalysis(WebCrawler crawler, std::string html, std::string url)
  * 根据 网页类型 解析HTML
  * @param webType 网页类型
  * @param html 欲解析的html字符串
+ * @param url 网页地址
  */
 void htmlAnalysis(
     WebCrawler crawler,
@@ -94,7 +122,7 @@ void htmlAnalysis(
         switch (webType)
         {
         case CrawlWebType::EHENTAI:
-            eHentaiHtmlAnalysis(html);
+            eHentaiHtmlAnalysis(html, url);
             break;
         case CrawlWebType::ORGHTTP:
             baseHtmlAnalysis(crawler, html, url);
@@ -108,6 +136,7 @@ void htmlAnalysis(
 }
 int main()
 {
+    // setConsoleUTF8();
     // 初始化
     curl_global_init(CURL_GLOBAL_DEFAULT);
     try
@@ -165,12 +194,12 @@ int main()
             return 0;
         }
         std::cout << "开始爬取中..." << std::endl;
-        std::string html = getHtmlByWebType(crawler, inputWebType, url, headers);
+        std::string html = UTF8ToGBK(crawler.get(url, headers)); // 执行GET请求
 
         std::cout << "爬取完成" << std::endl;
         if (!html.empty())
         {
-            // std::cout<<"原始HTML为"<<html<<std::endl;
+            //std::cout<<"原始HTML为"<<html<<std::endl;
             htmlAnalysis(crawler, inputWebType, html, url);
         }
         else

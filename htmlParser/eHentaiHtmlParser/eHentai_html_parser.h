@@ -15,5 +15,5 @@ public:
     // 提取漫画大小
     static std::string extractComicSize(const std::string &html);
     // 获取下一个分页链接
-    static std::string extractNextPageLink(const std::string &html);
+    static std::string extractNextPageLink(const std::string &html,const std::string &url);
 };

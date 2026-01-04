@@ -2,7 +2,7 @@
 #include <regex>
 #include <iostream>
 
-std::string EHentaiHtmlParser::extractNextPageLink(const std::string &html)
+std::string EHentaiHtmlParser::extractNextPageLink(const std::string &html,const std::string &url)
 {
     std::string nextPageLinkStr;
     std::smatch matches;
@@ -11,7 +11,7 @@ std::string EHentaiHtmlParser::extractNextPageLink(const std::string &html)
     if (std::regex_search(html, matches, nextPageLinkRegex))
     {
         std::cout<<"已匹配下一页链接"<<std::endl;
-        nextPageLinkStr = matches[1].str();
+        nextPageLinkStr =(url+"?next="+matches[1].str());
 
     };
     return nextPageLinkStr;
