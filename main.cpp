@@ -1,7 +1,38 @@
 #include <iostream>
-#include "crawler.h"     //包含爬虫类
+#include "crawler.h"                               //包含爬虫类
 #include "htmlParser/baseHtmlParser/html_parser.h" // 包含HTML解析器
-#include "enums.h"       // 包含枚举头文件
+#include "enums.h"                                 // 包含枚举头文件
+#include <sstream>
+/**
+ * 根据 网页类型 获取HTML
+ * @param webType 网页类型
+ */
+std::string getHTMLByWebType(webType : CrawlWebType)
+{
+    std::string html;
+    switch (webType)
+    {
+    case CrawlWebType::EHENTAI:
+
+        int pageSize = 10;
+        std::cout << "请输入爬取页码数量(默认页码:10)\n";
+        std::cin >> pageSize;
+        for (let i = 0; i < 10; i++)
+        {
+            html = crawler.get(url, headers); // 执行GET请求
+        }
+        
+        break;
+
+    case CrawlWebType::ORGHTTP:
+        html = crawler.get(url, headers); // 执行GET请求
+        break;
+    default:
+        html = crawler.get(url, headers); // 执行GET请求
+        break;
+    };
+    return html;
+}
 int main()
 {
     // 初始化
@@ -18,7 +49,7 @@ int main()
             {"Connection", "keep-alive"}};
 
         // 爬取网页
-        std::string url;           // 默认地址
+        std::string url;  // 默认地址
         int inputWebType; // 爬取网页类型
         std::cout << "请输入序号，以此选择爬取网页地址\n";
         std::cout << "1:E站(需使用VPN,否则无法爬取信息)\n";
@@ -27,7 +58,20 @@ int main()
         switch (inputWebType)
         {
         case CrawlWebType::EHENTAI:
-            url = "https://e-hentai.org/";
+            std::cout << "请输入漫画搜索词条\n";
+            std::string searchStr;
+            std::cin >> searchStr;
+            if (!searchStr.empty())
+            {
+                std::stringstream ss;
+                ss << "https://e-hentai.org/" << "?" << "f_search=" << searchStr;
+            }
+            else
+            {
+
+                url = "https://e-hentai.org/";
+            }
+            // https://e-hentai.org/?f_search=tomgirl
             break;
 
         case CrawlWebType::ORGHTTP:
@@ -43,7 +87,20 @@ int main()
             return 0;
         }
         std::cout << "开始爬取中..." << std::endl;
-        std::string html = crawler.get(url, headers); // 执行GET请求
+        std::string html;
+        switch (inputWebType)
+        {
+        case CrawlWebType::EHENTAI:
+
+            std::cout << "请输入爬取页码数量\n";
+            html = crawler.get(url, headers); // 执行GET请求
+            break;
+
+        case CrawlWebType::ORGHTTP:
+            html = crawler.get(url, headers); // 执行GET请求
+            break;
+        }
+
         std::cout << "爬取完成" << std::endl;
         if (!html.empty())
         {
